@@ -1,0 +1,33 @@
+{
+  "id": "actor-journal-helper",
+  "title": "Actor Journal Helper",
+  "description": "Simplifies the generation of individualized journal pages for each owned actor, adds links back to the associated character sheet, and streamlines page editing.",
+  "authors": [
+    {
+    "name": "puddleimages",
+    "email":"puddleimages@gmail.com",
+    "discord":"puddleimages"
+    }
+  ],
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum":"11",
+    "verified": "11"
+  },
+  "socket": true,
+  "scripts": [
+    "scripts/actor-journal-helper.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json"
+    }
+  ],
+  "url": "https://github.com/puddleimages/actor-journal-helper",
+  "manifest": "https://raw.githubusercontent.com/puddleimages/actor-journal-helper/main/module.json",
+  "download": "https://github.com/puddleimages/actor-journal-helper/archive/refs/heads/main.zip",
+  "bugs": "https://github.com/puddleimages/actor-journal-helper/issues",
+  "changelog": "https://github.com/puddleimages/actor-journal-helper/releases"
+}
