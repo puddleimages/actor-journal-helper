@@ -12,7 +12,9 @@ It is also highly recommended that you use **Ownership Viewer** in conjunction w
  
 ## Description
 
-This module streamlines the process of creating and managing a shared journal page for each actor by providing a button in the character sheet header that pulls up the editor window for the associated journal page after creating it (if it didn't already exist) and adding a link to the page's contents that can be used later to access the character sheet of the actor associated with it. Optionally, this module conveniently closes windows as the user navigates to the editor and commits their changes to the journal page, while allowing users to automatically gain ownership of a journal page associated to any actor that they have at least "limited" ownerhip of as long as a GM is logged in.
+This module streamlines the process of creating and managing a shared journal page for each actor by providing a button in the character sheet header that pulls up the editor window for the associated journal page after creating it (if it didn't already exist) and adding a link to the page's contents that can be used later to access the character sheet of the actor associated with it.
+
+Optionally, this module conveniently closes windows as the user navigates to the editor and commits their changes to the journal page, while allowing users to automatically gain ownership of a journal page associated to any actor that they have at least "limited" ownerhip of as long as a GM is logged in.
 
 ## Installation
 
