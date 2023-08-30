@@ -46,13 +46,17 @@ Users can access the "Journal" button via the actor's character sheet only if th
 - **Page Generation**: Adds a "Journal" button to the header of character sheets for generating a journal page associated with the actor and pulling up the page's editor window.
 - **Link Generation**: When an actor's "Journal" button is first clicked and the their associated page is generated, a link to the actor is added to the journal page.
 - **Limited Ownership**: most of the modules features are only accessible when a user has "limited" or higher ownership of an actor. Since the default ownership for each generated page is set to "none" for every non-GM user except the user that created the page via the "Journal" button, access to the generated journal pages is restricted by the GM still via the optional settings and the user's ownership status of the associated actor.
-- **Optional Settings**: GMs are provided with optional settings whenever feasible.
+- **Optional Settings**: Optional settings are provided to allow flexibility and for accomodating some other potential preferences. However, it is recommended that you enable all optional setting for the best experience.
 
 ## Optional Features
 
-- **Close Character Sheet on Journal Editing**: Optionally close the actor's character sheet when opening the associated journal page (enabled by default).
-- **Close Journal Page Editor on Save**: Optionally close the ProseMirror journal page editor when saving changes (enabled by default).
-- **Automatic Ownership Updates**: Enable or disable automatic ownership updates for journal pages (disabled by default because it requires socketlib).
+- **Close Character Sheet After Clicking the "Journal" Button**: When enabled, the character sheet will close when opening the journal editor with the "Journal" button.
+- **Close Journal Page Editor on Save**: When enabled, the ProseMirror journal page editor will close automatically when saving changes.
+- **Allow Journal Page Sharing**: When enabled, the "Journal" button creates a single journal page in the "Actor Journal" for each actor. Deactivate this to if you want the "Journal" button to generate a unique page for each user. Other settings may allow other users to access these pages though.
+- **Set Default Ownership of "Actor Journal" Pages to "None"**: When enabled, the default ownership for the pages created with the "Journal" button is set to "None". Deactivate this to set it to "Owner". Automatic and manual ownership updates should be unnecessary with this deactivated as all users should be owners.
+- **Allow Automatic Journal Page Alphabetization with Socketlib**: When enabled, this automatically alphabetized journal pages in the "Actor Journal" by page name whenever a new pages is created using the "Journal" button. You may need to have Library - socketlib module activated depending on ownership configurations.
+- **Allow Automatic Journal Pages Ownership Updates with Socketlib**: When enabled, socketlib will automatically update ownership of journal pages in the "Actor Journal" when required. You must have Library - socketlib module activated for this to work.
+
 
 ## Screenshots
 
