@@ -85,7 +85,7 @@ async function getSettings() {
 };
 
 async function ensureActorJournalExists() {
-  const actorJournalEntry = game.journal.getName("actorJournalName");
+  const actorJournalEntry = game.journal.getName(actorJournalName);
   
   if (!actorJournalEntry) {
     await JournalEntry.create({
