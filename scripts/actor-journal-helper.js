@@ -55,6 +55,15 @@ Hooks.once('setup', () => {
     default: false,
     type: Boolean
   });
+  
+  game.settings.register("actor-journal-helper", "actorJournalName", {
+    name: "Customize the name of the Actor Journal",
+    hint: 'When changed, Actor Journal will use a custom name instead of "Actor Journal". If changed after the original journal has been created, it will contribute to the newly named one instead.',
+    scope: "world",
+    config: true,
+    default: "Actor Journal",
+    type: String
+  });
 });
 
 let closeCharacterSheetOnJournalEditing;
@@ -63,6 +72,7 @@ let automaticAlphabetization;
 let defaultOwnershipSetting;
 let sharedJournalPages;
 let automaticOwnership;
+let actorJournalName;
 
 async function getSettings() {
   closeCharacterSheetOnJournalEditing = game.settings.get("actor-journal-helper", "closeCharacterSheetOnJournalEditing");
@@ -71,14 +81,15 @@ async function getSettings() {
   defaultOwnershipSetting = game.settings.get("actor-journal-helper", "defaultOwnership");
   sharedJournalPages = game.settings.get("actor-journal-helper", "sharedJournalPages");
   automaticOwnership = game.settings.get("actor-journal-helper", "automaticOwnership");
+  actorJournalName = game.settings.get("actor-journal-helper", "actorJournalName");
 };
 
 async function ensureActorJournalExists() {
-  const actorJournalEntry = game.journal.getName("Actor Journal");
+  const actorJournalEntry = game.journal.getName("actorJournalName");
   
   if (!actorJournalEntry) {
     await JournalEntry.create({
-      name: "Actor Journal",
+      name: actorJournalName,
       ownership: {
         default: 3,
       }
@@ -88,7 +99,7 @@ async function ensureActorJournalExists() {
 
 async function alphabetizeActorJournalPages() {
   try {
-    const actorJournalEntry = game.journal.getName("Actor Journal");
+    const actorJournalEntry = game.journal.getName(actorJournalName);
     const sortedPages = actorJournalEntry.pages
       .map(page => ({ _id: page.id, name: page.name }))
       .sort((a, b) => a.name.localeCompare(b.name))
@@ -162,7 +173,7 @@ Hooks.on('renderActorSheet', (app, html, data) => {
     };
 
     await ensureActorJournalExists()
-    const actorJournalEntry = await game.journal.getName("Actor Journal");
+    const actorJournalEntry = await game.journal.getName(actorJournalName);
 
     const actorJournalPageArray = await actorJournalEntry.pages.filter(page => {
       return page.getFlag('actor-journal-helper', 'actorId') === app.actor.id
