@@ -111,8 +111,8 @@ async function alphabetizeActorJournalPages() {
 };
 
 Hooks.once('ready', async () => {
-  ensureActorJournalExists()
   getSettings()
+  ensureActorJournalExists()
 });
 
 let socket;
