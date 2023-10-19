@@ -62,6 +62,7 @@ Hooks.once('setup', () => {
     scope: "world",
     config: true,
     default: "Actor Journal",
+    requiresReload: true,
     type: String
   });
 });
