@@ -256,7 +256,9 @@ Hooks.on('renderJournalTextPageSheet', (editor) => {
 
 Hooks.on('getProseMirrorMenuItems', (menu, config) => {
   const saveMenuItem = config.find(item => item.action === 'save');
-  if (saveMenuItem) {
+  const isCharacter = html.hasClass('character');
+  const isNPC = html.hasClass('npc');
+  if (isCharacter || isNPC) {
     saveMenuItem.cmd = () => {
       if (closeJournalPageEditorOnSave) {
         editorInstance.close();
