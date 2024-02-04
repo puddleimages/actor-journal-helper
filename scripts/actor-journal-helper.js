@@ -255,7 +255,6 @@ Hooks.on('renderJournalTextPageSheet', (editor) => {
 });
 
 Hooks.on('getProseMirrorMenuItems', (menu, config) => {
-  console.log(menu)
   const saveMenuItem = config.find(item => item.action === 'save');
   if (menu.view.dom.className === "editor-content journal-page-content ProseMirror") {
     saveMenuItem.cmd = () => {
