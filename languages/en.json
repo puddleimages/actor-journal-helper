@@ -1,5 +1,6 @@
 {
   "actor-journal-helper" : {
-    "journal-button": "Journal"
+    "journal-button": "Journal",
+    "journal-tooltip": "Journal"
   }
 }
