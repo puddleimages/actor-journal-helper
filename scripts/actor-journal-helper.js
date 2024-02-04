@@ -148,13 +148,27 @@ async function updateOwnership(journalEntryId, journalPageId, requesterUserId) {
 
 Hooks.on('renderActorSheet', (app, html, data) => {
   const header = html.find('.window-header');
+  const isCharacter = html.hasClass('character');
+  const isNPC = html.hasClass('npc');
+  const tooltipText = game.i18n.localize('actor-journal-helper.journal-tooltip');
+  const textLabel = game.i18n.localize('actor-journal-helper.journal-button');
 
-  const buttonElement = $(`
-    <a class="header-button control journal">
+  let buttonElement;
+
+  if (isCharacter) {
+    buttonElement = $(`
+    <a class="header-button control journal" data-tooltip="${tooltipText}">
       <i class="fa fa-book-open"></i>
-      ${game.i18n.localize('actor-journal-helper.journal-button')}
     </a>
   `);
+  } else if (isNPC) {
+    buttonElement = $(`
+    <a class="header-button control journal">
+      <i class="fa fa-book-open"></i>
+      ${textLabel}
+    </a>
+  `);
+  }
 
   header.children().last().before(buttonElement);
 
