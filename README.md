@@ -54,6 +54,7 @@ Users can access the "Journal" button via the actor's character sheet only if th
 - **Close Journal Page Editor on Save**: When enabled, the ProseMirror journal page editor will close automatically when saving changes.
 - **Allow Journal Page Sharing**: When enabled, the "Journal" button creates a single journal page in the "Actor Journal" for each actor. Deactivate this to if you want the "Journal" button to generate a unique page for each user. Other settings may allow other users to access these pages though.
 - **Set Default Ownership of "Actor Journal" Pages to "None"**: When enabled, the default ownership for the pages created with the "Journal" button is set to "None". Deactivate this to set it to "Owner". Automatic and manual ownership updates should be unnecessary with this deactivated as all users should be owners.
+- **Change Name of Default "Actor Journal" Page**: When the default value is changed, Actor Journal can use a custom name instead of "Actor Journal".
 - **Allow Automatic Journal Page Alphabetization with Socketlib**: When enabled, this automatically alphabetized journal pages in the "Actor Journal" by page name whenever a new pages is created using the "Journal" button. You may need to have Library - socketlib module activated depending on ownership configurations.
 - **Allow Automatic Journal Pages Ownership Updates with Socketlib**: When enabled, socketlib will automatically update ownership of journal pages in the "Actor Journal" when required. You must have Library - socketlib module activated for this to work.
 
