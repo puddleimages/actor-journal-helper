@@ -65,6 +65,20 @@ Hooks.once('setup', () => {
     requiresReload: true,
     type: String
   });
+
+  game.settings.register("actor-journal-helper", "journalButtonDisplay", {
+    name: "Journal Button Display",
+    hint: "Choose which journal buttons to display on the actor sheet.",
+    scope: "world",
+    config: true,
+    default: 1,
+    type: Number,
+    choices: {
+      1: "Button for Edit Actor Journal",
+      2: "Button for View Actor Journal",
+      3: "Both Buttons"
+    }
+  });
 });
 
 let closeCharacterSheetOnJournalEditing;
@@ -83,6 +97,7 @@ async function getSettings() {
   sharedJournalPages = game.settings.get("actor-journal-helper", "sharedJournalPages");
   automaticOwnership = game.settings.get("actor-journal-helper", "automaticOwnership");
   actorJournalName = game.settings.get("actor-journal-helper", "actorJournalName");
+  journalButtonDisplay = game.settings.get("actor-journal-helper", "journalButtonDisplay");
 };
 
 async function ensureActorJournalExists() {
@@ -148,19 +163,40 @@ async function updateOwnership(journalEntryId, journalPageId, requesterUserId) {
 
 Hooks.on('renderActorSheet', (app, html, data) => {
   const header = html.find('.window-header');
-  const tooltipText = game.i18n.localize('actor-journal-helper.journal-tooltip');
+  const journalEditorButtonTooltipText = game.i18n.localize('actor-journal-helper.journal-editor-tooltip');
+  const journalViewerButtonTooltipText = game.i18n.localize('actor-journal-helper.journal-viewer-tooltip');
 
-  let buttonElement = $(`
-    <a class="header-button control journal" data-tooltip="${tooltipText}">
+  const journalEditorButton = $(`
+    <a class="header-button control journal" data-tooltip="${journalEditorButtonTooltipText}">
+      <i class="fa fa-pencil-alt"></i>
+    </a>
+  `);
+
+  const journalViewerButton = $(`
+    <a class="header-button control journal" data-tooltip="${journalViewerButtonTooltipText}">
       <i class="fa fa-book-open"></i>
     </a>
   `);
 
-  header.children().last().before(buttonElement);
+  if (journalButtonDisplay === 1 || journalButtonDisplay === 3) {
+    header.children().last().before(journalEditorButton);
+  }
+  if (journalButtonDisplay === 2 || journalButtonDisplay === 3) {
+    header.children().last().before(journalViewerButton);
+  }
 
-  buttonElement.on('click', async (e) => {
+  journalEditorButton.on('click', async (e) => {
     e.preventDefault();
+    await openJournalPage(app, true);
+  });
 
+  journalViewerButton.on('click', async (e) => {
+    e.preventDefault();
+    await openJournalPage(app, false);
+  });
+});
+
+async function openJournalPage(app, editMode) {
     let defaultOwnership;
     if (defaultOwnershipSetting === true) {
       defaultOwnership = {
@@ -213,12 +249,24 @@ Hooks.on('renderActorSheet', (app, html, data) => {
         await socket.executeAsGM("alphabetizeActorJournalPages");
       }
       
-      newPage[0].sheet.render(true);
+      if (editMode) {
+        newPage[0].sheet.render(true);
+      } else {
+        newPage[0].parent.sheet.render(true, {pageId: newPage[0].id});
+      }
     } else if (actorJournalPageArray[0].ownership[game.userId] === 3 || actorJournalPageArray[0].ownership.default === 3) {
       if (pageArray) {
-        pageArray[0].sheet.render(true);
+        if (editMode) {
+          pageArray[0].sheet.render(true);
+        } else {
+          pageArray[0].parent.sheet.render(true, {pageId: pageArray[0].id});
+        }
       } else {
-        actorJournalPageArray[0].sheet.render(true);
+        if (editMode) {
+          actorJournalPageArray[0].sheet.render(true);
+        } else {
+          actorJournalPageArray[0].parent.sheet.render(true, {pageId: actorJournalPageArray[0].id});
+        }
       }
     } else if (automaticOwnership) {
       if (!socket) {
@@ -226,10 +274,18 @@ Hooks.on('renderActorSheet', (app, html, data) => {
       } else {
         if (pageArray) {
           await socket.executeAsGM("updateOwnership", actorJournalEntry._id, pageArray[0]._id, game.userId);
-          pageArray[0].sheet.render(true);
+          if (editMode) {
+            pageArray[0].sheet.render(true);
+          } else {
+            pageArray[0].parent.sheet.render(true, {pageId: pageArray[0].id});
+          }
         } else {
           await socket.executeAsGM("updateOwnership", actorJournalEntry._id, actorJournalPageArray[0]._id, game.userId);
-          actorJournalPageArray[0].sheet.render(true);
+          if (editMode) {
+            actorJournalPageArray[0].sheet.render(true);
+          } else {
+            actorJournalPageArray[0].parent.sheet.render(true, {pageId: actorJournalPageArray[0].id});
+          }
         }
       }
     } else {
@@ -238,14 +294,12 @@ Hooks.on('renderActorSheet', (app, html, data) => {
     if (closeCharacterSheetOnJournalEditing) {
       app.close();
     }
-  });
-});
+  };
 
 let editorInstance;
 
 Hooks.on('renderJournalTextPageSheet', (editor) => {
   editor.getData().then((data) => {
-
     if (data.editable) {
       editorInstance = editor;
     }
