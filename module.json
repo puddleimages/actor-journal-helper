@@ -9,9 +9,9 @@
     "discord":"puddleimages"
     }
   ],
-  "version": "1.0.0",
+  "version": "1.0.2",
   "compatibility": {
-    "minimum":"10",
+    "minimum":"11",
     "verified": "12"
   },
   "socket": true,
