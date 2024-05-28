@@ -72,6 +72,7 @@ Hooks.once('setup', () => {
     scope: "world",
     config: true,
     default: 1,
+    requiresReload: true,
     type: Number,
     choices: {
       1: "Button for Edit Actor Journal",
