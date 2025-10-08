@@ -11,8 +11,7 @@
   ],
   "version": "1.0.2",
   "compatibility": {
-    "maximum": "12",
-    "minimum": "11",
+    "minimum":"11",
     "verified": "12"
   },
   "socket": true,
