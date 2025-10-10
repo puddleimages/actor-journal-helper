@@ -1,7 +1,7 @@
 {
   "id": "actor-journal-helper",
   "title": "Actor Journal Helper",
-  "description": "Simplifies the generation of individualized journal pages for each owned actor, adds links back to the associated character sheet, and streamlines page editing.",
+  "description": "This module simplifies the generation of individualized journal pages for each owned actor, adds links back to the associated character sheet, and streamlines page editing.",
   "authors": [
     {
     "name": "puddleimages",
@@ -9,10 +9,10 @@
     "discord":"puddleimages"
     }
   ],
-  "version": "1.0.2",
+  "version": "2.0.0",
   "compatibility": {
-    "minimum": "11",
-    "verified": "12"
+    "minimum": "13",
+    "verified": "13"
   },
   "socket": true,
   "scripts": [
