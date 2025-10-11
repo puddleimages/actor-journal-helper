@@ -263,50 +263,55 @@ async function handlePlayerDoubleClick(playerId, clickPos) {
     const names = tokensClicked.map(t => t.name).join(", ");
     console.log(`Player ${player.name} actually clicked within token(s): ${names}`);
 
-    let targetUsers;
-    if (grantOwnershipToAll) {
-      targetUsers = game.users.filter(u => !u.isGM);
-    } else {
-      targetUsers = [player];
-    }
-
     for (const token of tokensClicked) {
       const transformedActor = token.actor.flags.dnd5e?.dataSourceActorId;
       const linkedActor = token.actor.prototypeToken.actorLink;
       let actorId;
+      let isTrans;
+
       if (transformedActor) {
-        actorId = token.actor.flags.dnd5e.dataSourceActorId;
+        actorId = transformedActor;
+        isTrans = true;
       } else if (!linkedActor) {
         actorId = token.actor.parent.actorId;
       } else {
-        actorId = token.actor._id;
+        actorId = token.actor.id;
       }
-      console.log(actorId)
-      let actor = game.actors.get(actorId);
 
+      const actor = game.actors.get(actorId);
       const limitedLevel = CONST.DOCUMENT_OWNERSHIP_LEVELS?.LIMITED ?? 1;
 
-      for (const u of targetUsers) {
-        if (actor.getUserLevel(u) >= limitedLevel) {
-          console.log(`${u.name} already has sufficient ownership of ${actor.name}.`);
-          continue;
-        }
+      try {
+        const newOwnership = foundry.utils.duplicate(actor.ownership || {});
 
-        try {
-          // Duplicate current ownership and update only this user
-          const newOwnership = foundry.utils.duplicate(actor.ownership || {});
-          newOwnership[u.id] = limitedLevel;
+        if (grantOwnershipToAll) {
+          if (newOwnership.default >= limitedLevel) {
+            console.log(`Default ownership for "${actor.name}" already sufficient.`);
+            if (isTrans) openActorSheetForUser(actor.id, player.id);
+            continue;
+          }
 
+          newOwnership.default = limitedLevel;
           await actor.update({ ownership: newOwnership });
+          console.log(`Set default ownership of "${actor.name}" to LIMITED for all players.`);
 
-          console.log(`Granted LIMITED ownership of "${actor.name}" to ${u.name}.`);
-          ui.notifications.info(`${u.name} now has LIMITED ownership of ${actor.name}.`);
-        } catch (err) {
-          console.error("Failed to update actor ownership for", actor, err);
-          ui.notifications.error(`Failed to grant ownership for ${actor.name}: see Console`);
+        } else {
+          if (actor.getUserLevel(player) >= limitedLevel) {
+            console.log(`${player.name} already has sufficient ownership of ${actor.name}.`);
+            if (isTrans) openActorSheetForUser(actor.id, player.id);
+            continue;
+          }
+
+          newOwnership[player.id] = limitedLevel;
+          await actor.update({ ownership: newOwnership });
+          openActorSheetForUser(actor.id, player.id);
+          console.log(`Granted LIMITED ownership of "${actor.name}" to ${player.name}.`);
+          ui.notifications.info(`${player.name} now has LIMITED ownership of ${actor.name}.`);
         }
+      } catch (err) {
+        console.error("Failed to update actor ownership for", actor, err);
+        ui.notifications.error(`Failed to grant ownership for ${actor.name}: see Console`);
       }
-      openActorSheetForUser(actor.id, player.id);
     }
   } else {
     console.log(`No tokens found at that click position.`);
